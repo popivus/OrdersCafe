@@ -1,0 +1,141 @@
+﻿<Window x:Class="OrdersPanel.Views.ProductAddView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:viewModels="clr-namespace:OrdersPanel.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:converters="clr-namespace:OrdersPanel.Converters"
+        xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBinding"
+        mc:Ignorable="d"
+        Title="Добавление продукта"
+        Style="{StaticResource BaseWindowStyle}">
+
+    <Window.Resources>
+        <converters:IntegerConverter x:Key="IntegerConverter"/>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <viewModels:ProductAddViewModel />
+    </Window.DataContext>
+
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Margin="10"
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        MinWidth="200" MinHeight="250"
+                        CornerRadius="14"
+                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                        BorderThickness="2">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="5"
+                                          Opacity=".5"
+                                          ShadowDepth="3" />
+                    </Border.Effect>
+                    <Image VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                           MinWidth="200" MinHeight="250"
+                           Stretch="Fill"
+                           Source="{Binding Image, UpdateSourceTrigger=PropertyChanged}" />
+                </Border>
+
+                <Button Grid.Row="1" Padding="3" Margin="10, 10, 17, 10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding AddImageCommand}">
+                    <Button.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       VerticalAlignment="Center" TextAlignment="Left"
+                                       Padding="7,0,10,0">
+                                Выбрать изображение
+                            </TextBlock>
+                            <materialDesign:PackIcon Grid.Column="1"
+                                                     Width="25" Height="25"
+                                                     Kind="FileImageAddOutline" />
+                        </Grid>
+                    </Button.Content>
+                </Button>
+
+            </Grid>
+
+            <Grid Grid.Column="1" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBox Grid.Row="0"
+                         Margin="0, 20, 0, 0"
+                         FontSize="14"
+                         materialDesign:HintAssist.HelperTextFontSize="13"
+                         materialDesign:HintAssist.FloatingScale="0.9"
+                         materialDesign:HintAssist.Hint="Название:"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Text="{Binding Product.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Cursor="Arrow" />
+
+                <TextBox Grid.Row="1"
+                         Margin="0, 20, 0, 0"
+                         FontSize="14"
+                         materialDesign:HintAssist.HelperTextFontSize="13"
+                         materialDesign:HintAssist.FloatingScale="0.9"
+                         materialDesign:HintAssist.Hint="Цена:"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Text="{Binding Product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, Converter={StaticResource IntegerConverter}}" Cursor="Arrow" />
+
+                <TextBox Grid.Row="2"
+                         Margin="0, 20, 0, 0" Padding="4"
+                         FontSize="14"
+                         materialDesign:HintAssist.HelperTextFontSize="13"
+                         materialDesign:HintAssist.FloatingScale="0.9"
+                         materialDesign:HintAssist.Hint="Доступное кол-во:"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Text="{Binding Product.QuantityAvailable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, Converter={StaticResource IntegerConverter}}" Cursor="Arrow" />
+            </Grid>
+        </Grid>
+
+        <Button Grid.Row="1" Padding="3" Margin="0, 15, 0, 20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                Command="{Binding AddProductCommand}"
+                IsEnabled="{calcBinding:Binding Path=!Product.HasErrors, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand">
+            <Button.Content>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center" TextAlignment="Left"
+                               Padding="7,0,10,0">
+                        Добавить продукт
+                    </TextBlock>
+                    <materialDesign:PackIcon Grid.Column="1"
+                                             Width="25" Height="25"
+                                             Kind="AddCircleOutline" />
+                </Grid>
+            </Button.Content>
+        </Button>
+    </Grid>
+</Window>
